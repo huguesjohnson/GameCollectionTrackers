@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="checkbox_instructions">Have instructions</string>
+    <string name="checkbox_box">Have box</string>
+    <string name="checkbox_game">Have game</string>
+    <string name="button_backtogamelist">Back to list</string>
+    <string name="label_gamelist">No games to display</string>
+    <string name="label_view">View:</string>
+    <string name="app_description">Sega 32X Collector - Application to track your Sega 32X game collection.\n\nCopyright (c) 2010 Hugues Johnson\n\nhttp://HuguesJohnson.com/</string>
+    <string name="app_name">Sega 32X Collector</string>
+    <string name="option_allgames">All 32X Games</string>
+    <string name="option_mygames">My collection</string>
+    <string name="option_mymissinggames">My missing games</string>
+    <string name="option_mymissingboxesinstructions">My missing boxes &amp; instructions</string>
+</resources>

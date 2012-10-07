@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/imageview_logo" android:src="@drawable/logo32x"></ImageView>
+
+<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/layout_selectview">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textview_viewlabel" android:text="@string/label_view"></TextView>
+<Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/spinner_selectview"></Spinner>
+</LinearLayout>
+
+
+<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/layout_gamelist">
+<ListView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/listview_games" android:choiceMode="singleChoice" android:clickable="true"></ListView>
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textview_gamelist" android:text="@string/label_gamelist"></TextView></LinearLayout>
+
+
+</LinearLayout>

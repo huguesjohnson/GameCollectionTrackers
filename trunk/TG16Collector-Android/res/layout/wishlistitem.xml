@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" android:orientation="horizontal">
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/wishlistitem_image" android:paddingLeft="4px" android:paddingRight="4px"></ImageView>
+<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+<TextView android:id="@+id/wishlistitem_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold"></TextView>
+<TextView android:id="@+id/wishlistitem_price" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<TextView android:id="@+id/wishlistitem_shipping" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+</LinearLayout>
+</LinearLayout>
