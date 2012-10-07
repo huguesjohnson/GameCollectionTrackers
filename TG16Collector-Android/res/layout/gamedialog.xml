@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:id="@+id/layout_gamedialogroot">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textview_gametitle"></TextView>
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/checkbox_game" android:text="@string/checkbox_game"></CheckBox>
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/checkbox_box" android:id="@+id/checkbox_box"></CheckBox>
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/checkbox_case" android:id="@+id/checkbox_case"></CheckBox>
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/checkbox_instructions" android:text="@string/checkbox_instructions"></CheckBox>
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/checkbox_wishlist" android:text="@string/checkbox_wishlist"></CheckBox>
+</LinearLayout>
