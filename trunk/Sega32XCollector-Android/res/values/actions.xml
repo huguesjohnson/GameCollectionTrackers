@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="action_list">
+        <item>All games</item>
+        <item>My collection</item>
+        <item>My missing games</item>
+        <item>My missing boxes &amp; instructions</item>
+	</string-array>
+</resources>
+    

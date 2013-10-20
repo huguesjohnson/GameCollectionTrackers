@@ -1,0 +1,22 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style 
+        name="x_theme" 
+        parent="Theme.Sherlock.Light"> 
+        <item name="actionBarStyle">@style/x_actionbar</item>
+    	<item name="android:actionBarStyle">@style/x_actionbar</item>
+        <item name="android:textColor">@color/x_black</item>
+	</style>
+
+	<style name="x_actionbar" parent="Widget.Sherlock.ActionBar">
+	    <item name="android:background">@color/x_backcolor</item>
+	    <item name="background">@color/x_backcolor</item>
+   	</style>  
+    
+    <color name="x_backcolor">#ffd966</color>
+    <color name="x_backcolor_alt">#fed233</color>
+    <color name="x_red">#f20902</color>
+    <color name="x_black">#000000</color>
+    <color name="x_white">#ffffff</color>
+    
+</resources>
