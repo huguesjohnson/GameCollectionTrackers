@@ -1,6 +1,6 @@
 /*
 Sega32XCollector - Mobile application to manage a collection of Sega 32X games
-Copyright (C) 2010 Hugues Johnson
+Copyright (C) 2010-2013 Hugues Johnson
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	 * returns all games in the database
 	 * @return
 	 */
-	public ArrayList<Sega32XRecord> getAllGames(){
+	public Sega32XRecord[] getAllGames(){
 		return(queryDatabase("SELECT recordId,title,game,box,instructions FROM "+TABLE_NAME));
 	}
 
@@ -85,7 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	 * returns all games the user has
 	 * @return
 	 */
-	public ArrayList<Sega32XRecord> getMyGames(){
+	public Sega32XRecord[] getMyGames(){
 		return(queryDatabase("SELECT recordId,title,game,box,instructions FROM "+TABLE_NAME+" WHERE game<>0"));
 	}
 
@@ -93,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	 * returns all games the user has
 	 * @return
 	 */
-	public ArrayList<Sega32XRecord> getMissingGames(boolean missingBoxes,boolean missingInstructions){
+	public Sega32XRecord[] getMissingGames(boolean missingBoxes,boolean missingInstructions){
 		StringBuffer sql=new StringBuffer();
 		sql.append("SELECT recordId,title,game,box,instructions FROM ");
 		sql.append(TABLE_NAME);
@@ -116,8 +116,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	 */
 	public Sega32XRecord getGame(int recordId){
 		String sql="SELECT recordId,title,game,box,instructions FROM "+TABLE_NAME+" WHERE recordId="+recordId;
-		ArrayList<Sega32XRecord> list=queryDatabase(sql);
-		return(list.get(0));
+		Sega32XRecord[] list=queryDatabase(sql);
+		return(list[0]);
 	}
 	
 	/**
@@ -151,7 +151,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		this.database.execSQL(sql.toString());
 	}
 	
-	private ArrayList<Sega32XRecord> queryDatabase(String sql){
+	private Sega32XRecord[] queryDatabase(String sql){
 		ArrayList<Sega32XRecord> list=new ArrayList<Sega32XRecord>();
 		Cursor cursor=this.database.rawQuery(sql,null);
 		if(cursor!=null){
@@ -191,7 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 			}
 			cursor.close();
 		}
-		return(list);
+		return(list.toArray(new Sega32XRecord[list.size()]));
 	}
 		
 	private String buildInsert(int recordId,String gameTitle){

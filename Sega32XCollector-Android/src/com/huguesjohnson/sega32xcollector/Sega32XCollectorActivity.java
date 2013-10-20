@@ -1,6 +1,6 @@
 /*
 Sega32XCollector - Mobile application to manage a collection of Sega 32X games
-Copyright (C) 2010 Hugues Johnson
+Copyright (C) 2010-2013 Hugues Johnson
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,182 +19,209 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 package com.huguesjohnson.sega32xcollector;
 
-import java.util.ArrayList;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
-public class Sega32XCollectorActivity extends Activity{
+public class Sega32XCollectorActivity extends SherlockActivity{
+	private static final String TAG="Sega32XCollectorActivity";
 	//constants
 	private final static int MENU_QUIT=0;
 	private final static int MENU_ABOUT=1;
+	private final static int CONTEXT_MENU_EDIT=0;
+	private final static int CONTEXT_MENU_EBAY=1;
 	//UI components
 	private ListView gameListView;
-	private Spinner selectViewSpinner;
+	//game dialog
+	private AlertDialog gameDialog;
 	private CheckBox haveGameCheckbox;
 	private CheckBox haveBoxCheckbox;
 	private CheckBox haveInstructionsCheckbox;
 	//other stuff used all over the place
 	private DatabaseHelper dbHelper;
-	private ArrayList<Sega32XRecord> activeRecords;
+	private Sega32XRecord[] activeRecords;
 	private Sega32XRecord selectedGame;
-	private boolean onGameViewPage=false;
-	private int selectViewSpinnerIndex=0;
-
-	OnClickListener backButtonListener=new OnClickListener(){
-		@Override
-		public void onClick(View view){
-			saveActiveGame();
-			loadMainView();
-		}
-	};
-		
-	OnItemClickListener selectGameListener=new OnItemClickListener(){
-		@Override
-		public void onItemClick(AdapterView<?> parent,View view,int position,long id){
-			selectedGame=(Sega32XRecord)gameListView.getAdapter().getItem(position);
-			loadGameView();
-		}
-	};
-	
-	OnItemSelectedListener selectViewListener=new OnItemSelectedListener(){           
-		@Override
-		   public void onItemSelected(AdapterView<?> parent,View view,int position,long id){
-			   selectViewSpinnerIndex=selectViewSpinner.getSelectedItemPosition();
-			   String selectedText=(String)selectViewSpinner.getSelectedItem();
-			   if(selectedText.equals(parent.getContext().getResources().getString(R.string.option_allgames))){
-					activeRecords=dbHelper.getAllGames();
-			   } else if(selectedText.equals(parent.getContext().getResources().getString(R.string.option_mygames))){
-					activeRecords=dbHelper.getMyGames();
-			   } else if(selectedText.equals(parent.getContext().getResources().getString(R.string.option_mymissinggames))){
-					activeRecords=dbHelper.getMissingGames(false,false);
-			   } else if(selectedText.equals(parent.getContext().getResources().getString(R.string.option_mymissingboxesinstructions))){
-					activeRecords=dbHelper.getMissingGames(true,true);
-			   }
-			   ArrayAdapter<Sega32XRecord> gameListAdapter=new ArrayAdapter<Sega32XRecord>(parent.getContext(),android.R.layout.simple_gallery_item,(Sega32XRecord[])activeRecords.toArray(new Sega32XRecord[activeRecords.size()]));
-			   gameListView.setAdapter(gameListAdapter);
-		   }
-		   
-		   public void onNothingSelected(AdapterView<?> parent){ /* not implemented */}
-	};
+	private int selectedGameIndex;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		try{
+			//setup actionbar
+			ActionBar actionBar=getSupportActionBar();
+			actionBar.setIcon(R.drawable.banner);
+			actionBar.setTitle("");
+			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+			SpinnerAdapter spinnerAdapter=ArrayAdapter.createFromResource(this,R.array.action_list,android.R.layout.simple_dropdown_item_1line);			
+			actionBar.setListNavigationCallbacks(spinnerAdapter,onNavigationListener);
 			//open the database
 			this.dbHelper=new DatabaseHelper(this.getApplicationContext());
-			this.loadMainView();
+			//load the view
+			this.setContentView(R.layout.main);
+	        this.gameListView=(ListView)this.findViewById(R.id.listview_games);
+	        this.gameListView.setOnItemClickListener(selectGameListener);
+	        this.gameListView.setLongClickable(true);
+	        registerForContextMenu(this.gameListView);
 		}catch(Exception x){
+			Log.e(TAG,"onCreate()",x);
 			TextView errorView=new TextView(this);
 			errorView.setText(x.getMessage());
 			this.setContentView(errorView);
 		}
-	}
-
-	private void loadMainView(){
-		this.onGameViewPage=false;
-		this.setContentView(R.layout.main);
-        //setup game list
-        Sega32XRecord[] records=new Sega32XRecord[1];
-        records[0]=new Sega32XRecord("Loading game list...");
-        ArrayAdapter<Sega32XRecord> gameListAdapter=new ArrayAdapter<Sega32XRecord>(this,android.R.layout.simple_gallery_item,records);
-        this.gameListView=(ListView)this.findViewById(R.id.listview_games);
-        this.gameListView.setAdapter(gameListAdapter);
-        this.gameListView.setOnItemClickListener(selectGameListener);
-        //setup the drop-down list
-        String[] selections=new String[]{
-        		this.getResources().getString(R.string.option_allgames),
-        		this.getResources().getString(R.string.option_mygames),
-        		this.getResources().getString(R.string.option_mymissinggames),
-        		this.getResources().getString(R.string.option_mymissingboxesinstructions)};
-        ArrayAdapter<String> spinnerAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,selections);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        this.selectViewSpinner=(Spinner)findViewById(R.id.spinner_selectview);
-        this.selectViewSpinner.setAdapter(spinnerAdapter);
-        this.selectViewSpinner.setOnItemSelectedListener(selectViewListener);
-        this.selectViewSpinner.setSelection(this.selectViewSpinnerIndex);
-	}
+	}	
 	
-	private void loadGameView(){
-		this.onGameViewPage=true;
-		this.setContentView(R.layout.gameview);
-		//set title
-		TextView title=(TextView)this.findViewById(R.id.textview_gametitle);
-		title.setText(this.selectedGame.getTitle());
-		//set image
-		ImageView boxImage=(ImageView)this.findViewById(R.id.imageview_box);
-		String imageName=this.selectedGame.getAndroidImageName();
-		String packageName=this.getPackageName();
-		int resourceId=this.getResources().getIdentifier(imageName,"drawable",packageName);
-		boxImage.setImageResource(resourceId);
-		//set checkboxes
-		this.haveGameCheckbox=(CheckBox)this.findViewById(R.id.checkbox_game);
-		this.haveGameCheckbox.setChecked(this.selectedGame.hasGame());
-		this.haveBoxCheckbox=(CheckBox)this.findViewById(R.id.checkbox_box);
-		this.haveBoxCheckbox.setChecked(this.selectedGame.hasBox());
-		this.haveInstructionsCheckbox=(CheckBox)this.findViewById(R.id.checkbox_instructions);
-		this.haveInstructionsCheckbox.setChecked(this.selectedGame.hasInstructions());
-		//set back button action
-		Button backButton=(Button)this.findViewById(R.id.button_backtogamelist);
-		backButton.setOnClickListener(backButtonListener);
-	}
-	
-	private void saveActiveGame(){
-		try{
-			selectedGame.setGame(haveGameCheckbox.isChecked());
-			selectedGame.setBox(haveBoxCheckbox.isChecked());
-			selectedGame.setInstructions(haveInstructionsCheckbox.isChecked());
-			dbHelper.updateGame(selectedGame);
-		}catch(Exception x){
-			TextView errorView=new TextView(this);
-			errorView.setText(x.getMessage());
-			this.setContentView(errorView);
-		}	
-	}
-	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onBackPressed()
-	 */
 	@Override
-	public void onBackPressed(){
-		if(this.onGameViewPage){
-			this.saveActiveGame();
-			this.loadMainView();
-		}else{
-			super.onBackPressed();
+	public void onCreateContextMenu(ContextMenu menu,View view,ContextMenuInfo menuInfo){
+		try{
+			if(view.getId()==R.id.listview_games){
+				AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo)menuInfo;
+				menu.setHeaderTitle(activeRecords[info.position].getTitle());
+				menu.add(Menu.NONE,CONTEXT_MENU_EDIT,CONTEXT_MENU_EDIT,"Edit");
+				menu.add(Menu.NONE,CONTEXT_MENU_EBAY,CONTEXT_MENU_EBAY,"Search ebay");
+			}
+		}catch(Exception x){
+			Log.e(TAG,"onCreateContextMenu",x);
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(android.view.MenuItem item){
+		try{
+			AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+			selectedGameIndex=info.position;  
+			if(selectedGameIndex>=0){
+				selectedGame=(Sega32XRecord)gameListView.getAdapter().getItem(selectedGameIndex);
+				int menuItemIndex=item.getItemId();
+				if(menuItemIndex==CONTEXT_MENU_EDIT){
+					showGameDialog();
+				}else if(menuItemIndex==CONTEXT_MENU_EBAY){
+					EbayActivity.setSearchTerm(selectedGame.getTitle()+" 32X");
+					Intent ebayIntent=new Intent(getApplicationContext(),EbayActivity.class);
+					startActivityForResult(ebayIntent,0);
+				}
+			}
+		}catch(Exception x){
+			Log.e(TAG,"onContextItemSelected",x);
+		}
+		  return(true);
+	}
+	
+	OnNavigationListener onNavigationListener=new OnNavigationListener() {
+		  @Override
+		  public boolean onNavigationItemSelected(int position,long itemId){
+			  try{
+				  switch(position){
+				  case 0:{activeRecords=dbHelper.getAllGames(); break;}
+				  case 1:{activeRecords=dbHelper.getMyGames(); break;}
+				  case 2:{activeRecords=dbHelper.getMissingGames(false,false); break;}
+				  case 3:{activeRecords=dbHelper.getMissingGames(true,true); break;}
+				  }
+				  GameListArrayAdapter gameListAdapter=new GameListArrayAdapter(getApplicationContext(),R.layout.listitemgame,activeRecords);
+				  gameListView.setAdapter(gameListAdapter);
+			  }catch(Exception x){
+					Log.e(TAG,"onNavigationListener.onNavigationItemSelected",x);
+			  }return(true);
+		  }
+	};	
+	
+	OnItemClickListener selectGameListener=new OnItemClickListener(){
+		@Override
+		public void onItemClick(AdapterView<?> parent,View view,int position,long id){
+			try{
+				selectedGameIndex=position;  
+				selectedGame=(Sega32XRecord)gameListView.getAdapter().getItem(selectedGameIndex);
+				showGameDialog();
+			}catch(Exception x){
+				Log.e(TAG,"onItemClick: position="+position,x);
+				showErrorDialog(x);
+			}
+		}
+	};
+	
+	private void showGameDialog(){
+		try{
+			//sanity check - it's probably impossible for this condition to occur
+			if(this.selectedGame==null){return;}
+			//create the game dialog
+			if(this.gameDialog==null){
+				LayoutInflater inflater=(LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
+				View layout=inflater.inflate(R.layout.gamedialog,(ViewGroup)findViewById(R.id.layout_gamedialogroot));
+				AlertDialog.Builder builder=new AlertDialog.Builder(this);
+				builder.setView(layout);
+				builder.setTitle(this.selectedGame.getTitle());
+				builder.setPositiveButton("Save",onGameDialogSaveListener);
+				builder.setNegativeButton("Cancel",onGameDialogCancelListener);
+				this.haveGameCheckbox=(CheckBox)layout.findViewById(R.id.gamedialog_checkbox_game);
+				this.haveBoxCheckbox=(CheckBox)layout.findViewById(R.id.gamedialog_checkbox_box);
+				this.haveInstructionsCheckbox=(CheckBox)layout.findViewById(R.id.gamedialog_checkbox_instructions);
+				this.gameDialog=builder.create();
+			}
+			//set the checkboxes
+			this.haveBoxCheckbox.setChecked(this.selectedGame.hasBox());
+			this.haveGameCheckbox.setChecked(this.selectedGame.hasGame());
+			this.haveInstructionsCheckbox.setChecked(this.selectedGame.hasInstructions());
+			//show the dialog
+			this.gameDialog.setTitle(this.selectedGame.getTitle());
+			this.gameDialog.show();
+		}catch(Exception x){
+			Log.e(TAG,"showGameDialog",x);
+			showErrorDialog(x);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 */
+	DialogInterface.OnClickListener onGameDialogSaveListener=new DialogInterface.OnClickListener(){
+		@Override
+		public void onClick(DialogInterface dialog,int which){
+			try{
+				selectedGame.setBox(haveBoxCheckbox.isChecked());
+				selectedGame.setGame(haveGameCheckbox.isChecked());
+				selectedGame.setInstructions(haveInstructionsCheckbox.isChecked());
+				dbHelper.updateGame(selectedGame);
+				GameListArrayAdapter adapter=(GameListArrayAdapter)gameListView.getAdapter();
+				adapter.update(selectedGameIndex,selectedGame);
+			}catch(Exception x){
+				Log.e(TAG,"onGameDialogSaveListener.onClick: which="+which,x);
+				showErrorDialog(x);
+			}
+		}
+	};	
+	
+	DialogInterface.OnClickListener onGameDialogCancelListener=new DialogInterface.OnClickListener(){
+		@Override
+		public void onClick(DialogInterface dialog,int which){
+			//not implemented
+		}
+	};	
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
-		menu.add(0,MENU_QUIT,0,"Quit");
-		menu.add(0,MENU_ABOUT,1,"About");
+		menu.add(0,MENU_QUIT,0,"Quit").setIcon(R.drawable.ic_menu_stop);
+		menu.add(0,MENU_ABOUT,1,"About").setIcon(R.drawable.ic_menu_about);
 		return(true);
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
-	 */
 	@Override
 	public boolean onMenuItemSelected(int featureId,MenuItem item){
 		switch(item.getItemId()){
@@ -213,4 +240,16 @@ public class Sega32XCollectorActivity extends Activity{
 		}
 		return(false);
 	}
+	
+	private void showErrorDialog(Exception x){
+		try{
+	        new AlertDialog.Builder(this)
+	   		.setTitle(R.string.app_name)
+	   		.setMessage(x.getMessage())
+	   		.setPositiveButton("Close", null)
+	   		.show();	
+		}catch(Exception reallyBadTimes){
+			Log.e(TAG,"showErrorDialog",reallyBadTimes);
+		}
+	}	
 }

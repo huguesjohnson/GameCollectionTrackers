@@ -1,6 +1,6 @@
 /*
 Sega32XCollector - Mobile application to manage a collection of Sega 32X games
-Copyright (C) 2009-2010 Hugues Johnson
+Copyright (C) 2009-2013 Hugues Johnson
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -68,6 +68,10 @@ public class Sega32XRecord{
 			imageNameBuffer.deleteCharAt(indexof);
 		}
 		indexof=this.title.indexOf('\'');
+		if(indexof>0){
+			imageNameBuffer.deleteCharAt(indexof);
+		}
+		indexof=this.title.indexOf('-');
 		if(indexof>0){
 			imageNameBuffer.deleteCharAt(indexof);
 		}

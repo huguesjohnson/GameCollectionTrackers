@@ -3,13 +3,19 @@
     <string name="checkbox_instructions">Have instructions</string>
     <string name="checkbox_box">Have box</string>
     <string name="checkbox_game">Have game</string>
-    <string name="button_backtogamelist">Back to list</string>
     <string name="label_gamelist">No games to display</string>
-    <string name="label_view">View:</string>
-    <string name="app_description">Sega 32X Collector - Application to track your Sega 32X game collection.\n\nCopyright (c) 2010 Hugues Johnson\n\nhttp://HuguesJohnson.com/</string>
+    <string name="app_description">Sega 32X Collector - Application to track your Sega 32X game collection.\n\nCopyright (c) 2010-2013 Hugues Johnson\n\nhttp://HuguesJohnson.com/</string>
     <string name="app_name">Sega 32X Collector</string>
-    <string name="option_allgames">All 32X Games</string>
-    <string name="option_mygames">My collection</string>
-    <string name="option_mymissinggames">My missing games</string>
-    <string name="option_mymissingboxesinstructions">My missing boxes &amp; instructions</string>
+    <string name="listingdetail_label_starttime">Start Time: </string>
+    <string name="listingdetail_label_endtime">End Time: </string>
+    <string name="listingdetail_label_price">Current Price: </string>
+    <string name="listingdetail_label_shipping">Shipping: </string>
+    <string name="listingdetail_label_location">Location: </string>
+    <string name="listingdetail_label_listingtype">Listing Type: </string>
+    <string name="listingdetail_caption_auction">Auction</string>
+    <string name="listingdetail_caption_buyitnow">Buy it now</string>
+    <string name="listingdetail_caption_unknown">Not specified</string>
+    <string name="listingdetail_label_link">Open listing on </string>
+    <string name="auctionlist_searching">Searching for auctions...</string>
+    <string name="auctionlist_error">Sorry, no results found for: </string>
 </resources>
