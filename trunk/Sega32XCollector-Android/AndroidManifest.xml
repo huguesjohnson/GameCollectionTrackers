@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.huguesjohnson.sega32xcollector"
-      android:versionCode="2"
-      android:versionName="1.1">
+    package="com.huguesjohnson.sega32xcollector"
+    android:versionCode="3"
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
-	
-	<uses-permission 
-	    android:name="android.permission.INTERNET" /> 
-	
-	<uses-permission 
-	    android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    
-    <application 
-        android:icon="@drawable/icon" 
-        android:label="@string/app_name" 
-        android:description="@string/app_description"
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
         android:allowBackup="true"
-        android:theme="@style/x_theme">
-        <activity 
-            android:name=".Sega32XCollectorActivity"
-            android:label="@string/app_name">
+        android:description="@string/app_description"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@style/x_theme" >
+        <activity
+            android:name="com.huguesjohnson.sega32xcollector.Sega32XCollectorActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity android:name=".EbayActivity" />
-	</application>
+        <activity android:name="com.huguesjohnson.sega32xcollector.EbayActivity" />
+        <activity
+            android:name="com.huguesjohnson.sega32xcollector.ExportActivity"
+            android:label="@string/title_activity_export" >
+        </activity>
+        <activity
+            android:name="com.huguesjohnson.sega32xcollector.ImportActivity"
+            android:label="@string/title_activity_import" >
+        </activity>
+    </application>
 
-</manifest> 
+</manifest>
