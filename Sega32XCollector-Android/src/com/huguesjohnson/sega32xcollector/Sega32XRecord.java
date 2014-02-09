@@ -33,10 +33,16 @@ public class Sega32XRecord{
 	private int recordId;
 	private boolean dirtyFlag;
 
-	/**
-	 * Creates the object from a byte array - used to retrieve from an RMS record
-	 * @param bytes
-	 */
+	public Sega32XRecord(String title){
+		super();
+		this.title=title;
+		this.game=false;
+		this.box=false;
+		this.instructions=false;
+		this.dirtyFlag=false;
+		this.setAndroidImageName();
+	}
+	
 	public Sega32XRecord(int recordId,byte[] bytes){
 		String str=new String(bytes);
 		this.game=str.substring(0,1).equals("1");
@@ -48,15 +54,13 @@ public class Sega32XRecord{
 		this.setAndroidImageName();
 	}
 	
-	/**
-	 * @param title
-	 */
-	public Sega32XRecord(String title){
+	public Sega32XRecord(String title,int recordId,boolean hasGame,boolean hasBox,boolean hasInstructions){
 		super();
 		this.title=title;
-		this.game=false;
-		this.box=false;
-		this.instructions=false;
+		this.recordId=recordId;
+		this.game=hasGame;
+		this.box=hasBox;
+		this.instructions=hasInstructions;
 		this.dirtyFlag=false;
 		this.setAndroidImageName();
 	}
