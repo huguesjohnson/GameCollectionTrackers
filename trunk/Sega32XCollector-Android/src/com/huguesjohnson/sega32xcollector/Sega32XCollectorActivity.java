@@ -28,6 +28,7 @@ import com.actionbarsherlock.view.MenuItem;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -46,8 +47,11 @@ import android.widget.TextView;
 public class Sega32XCollectorActivity extends SherlockActivity{
 	private static final String TAG="Sega32XCollectorActivity";
 	//constants
-	private final static int MENU_QUIT=0;
-	private final static int MENU_ABOUT=1;
+	private final static int MENU_HELP=0;
+	private final static int MENU_EXPORT=1;
+	private final static int MENU_IMPORT=2;
+	private final static int MENU_ABOUT=3;
+	private final static int MENU_QUIT=4;
 	private final static int CONTEXT_MENU_EDIT=0;
 	private final static int CONTEXT_MENU_EBAY=1;
 	//UI components
@@ -62,6 +66,8 @@ public class Sega32XCollectorActivity extends SherlockActivity{
 	private Sega32XRecord[] activeRecords;
 	private Sega32XRecord selectedGame;
 	private int selectedGameIndex;
+	//used to see if we need to refresh after an import
+	private static boolean importFlag=false;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -91,6 +97,17 @@ public class Sega32XCollectorActivity extends SherlockActivity{
 		}
 	}	
 	
+	@Override
+	protected void onResume(){
+		super.onResume();
+		if(importFlag){
+			//force the list to refresh
+			importFlag=false;
+			ActionBar actionBar=getSupportActionBar();
+			setGameList(actionBar.getSelectedNavigationIndex());
+		}
+	}
+
 	@Override
 	public void onCreateContextMenu(ContextMenu menu,View view,ContextMenuInfo menuInfo){
 		try{
@@ -127,23 +144,28 @@ public class Sega32XCollectorActivity extends SherlockActivity{
 		  return(true);
 	}
 	
-	OnNavigationListener onNavigationListener=new OnNavigationListener() {
+	OnNavigationListener onNavigationListener=new OnNavigationListener(){
 		  @Override
 		  public boolean onNavigationItemSelected(int position,long itemId){
 			  try{
-				  switch(position){
-				  case 0:{activeRecords=dbHelper.getAllGames(); break;}
-				  case 1:{activeRecords=dbHelper.getMyGames(); break;}
-				  case 2:{activeRecords=dbHelper.getMissingGames(false,false); break;}
-				  case 3:{activeRecords=dbHelper.getMissingGames(true,true); break;}
-				  }
-				  GameListArrayAdapter gameListAdapter=new GameListArrayAdapter(getApplicationContext(),R.layout.listitemgame,activeRecords);
-				  gameListView.setAdapter(gameListAdapter);
+				  setGameList(position);
 			  }catch(Exception x){
 					Log.e(TAG,"onNavigationListener.onNavigationItemSelected",x);
 			  }return(true);
 		  }
 	};	
+	
+	private void setGameList(int position){
+		  switch(position){
+		  case 0:{activeRecords=dbHelper.getAllGames(); break;}
+		  case 1:{activeRecords=dbHelper.getMyGames(); break;}
+		  case 2:{activeRecords=dbHelper.getMissingGames(false,false); break;}
+		  case 3:{activeRecords=dbHelper.getMissingGames(true,true); break;}
+		  }
+		  GameListArrayAdapter gameListAdapter=new GameListArrayAdapter(getApplicationContext(),R.layout.listitemgame,activeRecords);
+		  gameListView.setAdapter(gameListAdapter);
+	}
+	
 	
 	OnItemClickListener selectGameListener=new OnItemClickListener(){
 		@Override
@@ -217,8 +239,11 @@ public class Sega32XCollectorActivity extends SherlockActivity{
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
-		menu.add(0,MENU_QUIT,0,"Quit").setIcon(R.drawable.ic_menu_stop);
-		menu.add(0,MENU_ABOUT,1,"About").setIcon(R.drawable.ic_menu_about);
+		menu.add(0,MENU_HELP,MENU_HELP,"Help..");
+		menu.add(0,MENU_EXPORT,MENU_EXPORT,"Export..");
+		menu.add(0,MENU_IMPORT,MENU_IMPORT,"Import..");
+		menu.add(0,MENU_ABOUT,MENU_ABOUT,"About");
+		menu.add(0,MENU_QUIT,MENU_QUIT,"Quit");
 		return(true);
 	}
 
@@ -237,6 +262,22 @@ public class Sega32XCollectorActivity extends SherlockActivity{
                		.show();
 				break;
 			}
+			case MENU_EXPORT:{
+				Intent exportIntent=new Intent(getApplicationContext(),ExportActivity.class);
+				startActivityForResult(exportIntent,0);
+				break;
+			}
+			case MENU_IMPORT:{
+				importFlag=true;
+				Intent importIntent=new Intent(getApplicationContext(),ImportActivity.class);
+				startActivityForResult(importIntent,0);
+				break;
+			}
+			case MENU_HELP:{
+				Intent browserIntent=new Intent(Intent.ACTION_VIEW,Uri.parse(getResources().getString(R.string.help_url)));
+				this.startActivity(browserIntent);
+				break;
+			}
 		}
 		return(false);
 	}
@@ -246,7 +287,7 @@ public class Sega32XCollectorActivity extends SherlockActivity{
 	        new AlertDialog.Builder(this)
 	   		.setTitle(R.string.app_name)
 	   		.setMessage(x.getMessage())
-	   		.setPositiveButton("Close", null)
+	   		.setPositiveButton("Close",null)
 	   		.show();	
 		}catch(Exception reallyBadTimes){
 			Log.e(TAG,"showErrorDialog",reallyBadTimes);

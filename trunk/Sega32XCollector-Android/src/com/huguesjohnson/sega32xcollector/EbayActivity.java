@@ -69,7 +69,8 @@ public class EbayActivity extends SherlockActivity{
 	private TextView textViewLink;
 	//menu constants
 	private final static int MENU_BACK=0;
-	private final static int MENU_REFRESH=1;
+	private final static int MENU_HELP=1;
+	private final static int MENU_REFRESH=2;
 
 	private static String originalSearchTerm;
 	private static String _searchTerm;
@@ -202,8 +203,9 @@ public class EbayActivity extends SherlockActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		try{
-			menu.add(0,MENU_BACK,0,"Back").setIcon(R.drawable.ic_menu_back);
-			menu.add(0,MENU_REFRESH,1,"Refresh").setIcon(R.drawable.ic_menu_refresh);
+			menu.add(0,MENU_BACK,0,"Back");
+			menu.add(0,MENU_HELP,MENU_HELP,"Help..");
+			menu.add(0,MENU_REFRESH,1,"Refresh");
 			return(true);
 		}catch(Exception x){
 			Log.e(TAG,"onCreateOptionsMenu",x);
@@ -215,10 +217,16 @@ public class EbayActivity extends SherlockActivity{
 	public boolean onOptionsItemSelected(MenuItem item){
 		try{
 			switch(item.getItemId()){
-			case MENU_REFRESH:{this.refreshAuctionList();return(true);}
-			case MENU_BACK:{this.finish();return(true);}
+			case MENU_REFRESH:{this.refreshAuctionList();break;}
+			case MENU_BACK:{this.finish();break;}
+			case MENU_HELP:{
+				Intent browserIntent=new Intent(Intent.ACTION_VIEW,Uri.parse(getResources().getString(R.string.help_url)));
+				this.startActivity(browserIntent);
+				break;
+			}
 			default:{return(false);}
 			}
+			return(true);
 		}catch(Exception x){
 			Log.e(TAG,"onOptionsItemSelected",x);
 			return(false);
