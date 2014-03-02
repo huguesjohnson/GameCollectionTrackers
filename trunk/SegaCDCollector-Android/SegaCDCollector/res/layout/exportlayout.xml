@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" 
+	android:layout_width="fill_parent" 
+	android:scrollbars="vertical" 
+	android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewExportFileLabel"
+        android:layout_width="wrap_content"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/label_exportname" />
+
+    <EditText
+        android:id="@+id/editTextExportFileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_below="@+id/textViewExportFileLabel"
+         >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textViewExportFormatLabel"
+        android:paddingTop="4dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_exportformat" 
+		android:layout_below="@+id/editTextExportFileName"
+        />
+
+    <RadioButton
+        android:id="@+id/radioButtonExportJson"
+        android:checked="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_below="@+id/textViewExportFormatLabel"
+        android:text="@string/label_json" />
+
+    <TextView
+        android:id="@+id/textViewExportHint"
+        android:paddingTop="4dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_below="@+id/radioButtonExportJson"
+        android:text="@string/label_export_hint" />
+
+        <Button
+            android:id="@+id/buttonExportCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/label_cancel" />
+
+        <Button
+            android:id="@+id/buttonExport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/buttonExportCancel"
+            android:text="@string/label_export" />
+
+
+</RelativeLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" 
+	android:layout_width="fill_parent" 
+	android:scrollbars="vertical" 
+	android:orientation="vertical"
+	android:background="@color/scd_backcolor">
+
+	<LinearLayout
+	    android:id="@+id/auctionlayout_progressbanner"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+
+		<ProgressBar
+		    android:id="@+id/auctionlayout_progressbar"
+		    style="?android:attr/progressBarStyleSmall"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"/>
+
+		<TextView
+		    android:id="@+id/auctionlayout_progresstext"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" 
+		    android:text="@string/auctionlist_searching"
+		    android:paddingLeft="4dp"
+		    android:textColor="@color/scd_blue"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	    android:id="@+id/auctionlayout_error"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:visibility="gone">
+
+		<ImageView
+		    android:src="@drawable/ic_error"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"/>
+
+		<TextView
+		    android:text="@string/auctionlist_error"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" 
+		    android:paddingLeft="4dp"
+		    android:textColor="@color/scd_blue"/>
+		
+		<TextView
+		    android:id="@+id/auctionlist_error_searchterm"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:paddingLeft="4dp"
+		    android:textColor="@color/scd_blue"/>
+
+	</LinearLayout>	
+	
+	<ListView
+	    android:id="@+id/auctionlayout_listview"
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent" >
+	</ListView>
+
+</LinearLayout>

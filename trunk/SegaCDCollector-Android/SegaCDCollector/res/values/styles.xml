@@ -1,0 +1,18 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style 
+        name="scd_theme" 
+        parent="android:Theme.Holo.Light">
+		<item name="android:actionBarStyle">@style/SCDActionBar</item>
+    </style>
+	
+	<style name="SCDActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/scd_blue</item>
+    </style>
+    
+	<color name="scd_backcolor">#fdfffe</color>
+	<color name="scd_backcolor_alt">#dedee0</color>
+	<color name="scd_blue">#1772b9</color>
+    <color name="scd_white">#fdfffe</color>
+    
+</resources>
