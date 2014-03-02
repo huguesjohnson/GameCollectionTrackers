@@ -1,6 +1,6 @@
 /*
 SegaCDCollector - Mobile application to manage a collection of Sega CD games
-Copyright (C) 2010 Hugues Johnson
+Copyright (C) 2010-2014 Hugues Johnson
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,35 +39,35 @@ public class SegaCDRecord{
 		this.title=title;
 	}
 	
-	public boolean isHaveGame(){
+	public boolean hasGame(){
 		return haveGame;
 	}
 	
-	public void setHaveGame(boolean haveGame){
+	public void setGame(boolean haveGame){
 		this.haveGame=haveGame;
 	}
 	
-	public boolean isHaveBox(){
+	public boolean hasBox(){
 		return haveBox;
 	}
 	
-	public void setHaveBox(boolean haveBox){
+	public void setBox(boolean haveBox){
 		this.haveBox=haveBox;
 	}
 	
-	public boolean isHaveCase(){
+	public boolean hasCase(){
 		return haveCase;
 	}
 	
-	public void setHaveCase(boolean haveCase){
+	public void setCase(boolean haveCase){
 		this.haveCase=haveCase;
 	}
 	
-	public boolean isHaveInstructions(){
+	public boolean hasInstructions(){
 		return haveInstructions;
 	}
 	
-	public void setHaveInstructions(boolean haveInstructions){
+	public void setInstructions(boolean haveInstructions){
 		this.haveInstructions=haveInstructions;
 	}
 	

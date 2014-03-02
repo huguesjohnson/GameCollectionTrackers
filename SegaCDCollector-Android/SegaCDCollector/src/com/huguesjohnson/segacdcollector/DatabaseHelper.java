@@ -1,6 +1,6 @@
 /*
 SegaCDCollector - Mobile application to manage a collection of Sega CD games
-Copyright (C) 2010 Hugues Johnson
+Copyright (C) 2010-2014 Hugues Johnson
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -162,7 +162,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){/* not implemented */}
+	public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
+		/* not implemented */
+		Log.d("SegaCDCollector","DatabaseHelper.onUpgrade() called");
+	}
 	
 	@Override
 	public synchronized void close(){
@@ -331,25 +334,25 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		sql.append("UPDATE ");
 		sql.append(TABLE_NAME);
 		sql.append(" SET havegame=");
-		if(record.isHaveGame()){
+		if(record.hasGame()){
 			sql.append(1);
 		} else{
 			sql.append(0);
 		}
 		sql.append(", havebox=");
-		if(record.isHaveBox()){
+		if(record.hasBox()){
 			sql.append(1);
 		} else{
 			sql.append(0);
 		}
 		sql.append(", haveinstructions=");
-		if(record.isHaveInstructions()){
+		if(record.hasInstructions()){
 			sql.append(1);
 		} else{
 			sql.append(0);
 		}
 		sql.append(", havecase=");
-		if(record.isHaveCase()){
+		if(record.hasCase()){
 			sql.append(1);
 		} else{
 			sql.append(0);
@@ -404,30 +407,30 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				}
 				if(gameColumn>=0){
 					if(cursor.getInt(gameColumn)==0){
-						record.setHaveGame(false);
+						record.setGame(false);
 					} else{
-						record.setHaveGame(true);
+						record.setGame(true);
 					}
 				}
 				if(boxColumn>=0){
 					if(cursor.getInt(boxColumn)==0){
-						record.setHaveBox(false);
+						record.setBox(false);
 					} else{
-						record.setHaveBox(true);
+						record.setBox(true);
 					}
 				}
 				if(instructionsColumn>=0){
 					if(cursor.getInt(instructionsColumn)==0){
-						record.setHaveInstructions(false);
+						record.setInstructions(false);
 					} else{
-						record.setHaveInstructions(true);
+						record.setInstructions(true);
 					}
 				}
 				if(caseColumn>=0){
 					if(cursor.getInt(caseColumn)==0){
-						record.setHaveCase(false);
+						record.setCase(false);
 					} else{
-						record.setHaveCase(true);
+						record.setCase(true);
 					}
 				}
 				if(wishlistColumn>=0){
