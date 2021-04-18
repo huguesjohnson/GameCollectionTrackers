@@ -66,16 +66,6 @@ public class EbayListAdapter extends ArrayAdapter<Listing>{
 				dlTask.setImageView(imageView);
 				dlTask.execute(imageUrl);
 			}
-//			try{
-//				URL url=new URL(listing.getImageUrl());
-//				InputStream is=(InputStream)url.getContent();
-//				Drawable image=Drawable.createFromStream(is,"src");
-//				ImageView imageView=new ImageView(context);
-//				imageView=(ImageView)layout.findViewById(R.id.listitem_ebay_image);
-//				imageView.setImageDrawable(image);
-//			}catch(Exception x){
-//				Log.e(TAG,"getView - in if(listing.getListingUrl()!=null)",x);
-//			}
 		return(layout);  	
 	}
 	

@@ -38,7 +38,7 @@ import android.util.Log;
 
 public class EbayUtils{
 	private final static String TAG="EbayUtils";
-	private final static String REQUEST_TEMPLATE="^1services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=^2&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=^3&paginationInput.entriesPerPage=5&affiliate.networkId=9&affiliate.trackingId=5336663984&affiliate.customId=sega32xcollector&sortOrder=StartTimeNewest";
+	private final static String REQUEST_TEMPLATE="^1services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=^2&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=^3&paginationInput.entriesPerPage=5&affiliate.networkId=9&affiliate.trackingId=**********&affiliate.customId=sega32xcollector&sortOrder=StartTimeNewest";
 	private SimpleDateFormat dateFormat;
 	private String appID;
 	private String ebayURL;

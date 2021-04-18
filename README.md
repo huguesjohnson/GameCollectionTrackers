@@ -8,3 +8,7 @@ A few small applications to keep track of video game collections (for niche syst
 -Sega 32X Collector (Android) - Android 1.3 application to track Sega 32X games.
 
 -Sega 32X Collector (J2ME) - Java Mobile application to track Sega 32X games. 
+
+**Project Status**
+
+This project is now archived. These are all for obsolete mobile platforms and I am not interested in keeping them current. I found that a spreadsheet worked just as well.

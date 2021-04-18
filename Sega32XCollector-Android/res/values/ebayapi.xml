@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ebay_source_name">eBay</string> 
-    <string name="ebay_appid_sandbox">httpHugu-08bf-42a8-a808-ab330acda3f1</string> 
-    <string name="ebay_appid_production">httpHugu-b230-495c-afe4-56092973ce5d</string>
+    <string name="ebay_appid_sandbox">**************************</string> 
+    <string name="ebay_appid_production">**************************</string>
     <string name="ebay_wsurl_sandbox">http://sandbox.ebay.com/</string>
     <string name="ebay_wsurl_production">http://svcs.ebay.com/</string>
     <string name="ebay_tag_findItemsByKeywordsResponse">findItemsByKeywordsResponse</string>
